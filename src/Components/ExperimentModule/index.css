@@ -1,4 +1,4 @@
-.experimentModule {
+.experiment-module {
   display: flex;
   flex-direction: column;
   background-color: var(--dark-gray-color);
@@ -8,7 +8,12 @@
   padding: 1.1rem;
 }
 
-.experimentModule.disabled {
+.experiment-module-state {
+  font-size: 10px;
+  padding-bottom: 2px;
+}
+
+.experiment-module.disabled {
   cursor: default;
 }
 

@@ -4,3 +4,22 @@
   flex-direction: column;
   gap: 12px;
 }
+
+.button-add-experiment-module {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-add-experiment-module > button {
+  border: none;
+  width: fit-content;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-top: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  background-color: var(--dark-gray-color);
+  color:  var(--white-color);
+}
