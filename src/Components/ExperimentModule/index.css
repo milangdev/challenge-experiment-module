@@ -1,0 +1,99 @@
+.experimentModule {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--dark-gray-color);
+  color: var(--gray-color);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 1.1rem;
+}
+
+.experimentModule.disabled {
+  cursor: not-allowed;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.header.open > span {
+  color: var(--white-color);
+}
+
+.iterations {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  color: var(--gray-color);
+  gap: 2px;
+}
+
+.iterations.single > :only-child {
+  border-radius: 8px;
+}
+
+.iterations > :first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+.iterations > :last-child {
+  border-radius: 0 0 8px 8px;
+}
+
+.iteration {
+  display: flex;
+  background-color: var(--black-color);
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.info .id {
+  margin-right: 1.5rem;
+}
+
+.info .title {
+  color: var(--light-gray-color);
+}
+
+.selection {
+  display: flex;
+  align-items: center;
+}
+
+.selection .indicator {
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: var(--green-color);
+  border-radius: 9999px;
+  margin-left: 0.6rem;
+}
+
+.footer {
+  display: flex;
+  justify-content: end;
+  gap: 32px;
+  margin-top: 16px;
+}
+
+.action {
+  border: none;
+  background: none;
+  font-weight: bold;
+  color: var(--gray-color);
+  letter-spacing: 1px;
+}
+
+.action.add-iteration {
+  color: var(--white-color);
+}
