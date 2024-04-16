@@ -9,7 +9,7 @@
 }
 
 .experimentModule.disabled {
-  cursor: not-allowed;
+  cursor: default;
 }
 
 .header {
