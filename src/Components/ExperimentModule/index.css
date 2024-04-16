@@ -13,7 +13,7 @@
   padding-bottom: 2px;
 }
 
-.experiment-module.disabled {
+.experiment-module.default {
   cursor: default;
 }
 
@@ -97,8 +97,34 @@
   font-weight: bold;
   color: var(--gray-color);
   letter-spacing: 1px;
+  cursor: pointer;
 }
 
 .action.add-iteration {
   color: var(--white-color);
+}
+
+.input.add-iteration {
+  border: none;
+  background: none;
+  color: #ffffff;
+  width: 80%;
+  font-size: 16px;
+}
+
+input:focus {
+  outline: none;
+  border: none;
+}
+
+.add-iteration-info {
+  margin-top: 16px;
+  background-color: var(--black-color);
+  border-radius: 10px;
+  color: var(--gray-color);
+  padding: 1.1rem;
+}
+
+.add-iteration-info .click {
+  border-bottom: 1px solid var(--gray-color);
 }
