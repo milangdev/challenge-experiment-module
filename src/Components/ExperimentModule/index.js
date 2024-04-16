@@ -97,9 +97,7 @@ export default function ExperimentModule ({ data, setModules }) {
   }
 
   const handleExperimentModuleClick = () => {
-    if (!lock) {
-      setIsOpenModule(!isOpenModule)
-    }
+    setIsOpenModule(!isOpenModule)
     setIsAddIteration(false)
   }
 
@@ -107,6 +105,37 @@ export default function ExperimentModule ({ data, setModules }) {
     if (lock) return 'Locked'
     else if (!lock && iterations.length > 0) return 'Unlocked'
     else if (iterations.length === 0) return 'Empty'
+  }
+
+  const handleLock = () => {
+    setModules((modules) =>
+      modules.map((item) => {
+        if (item.id === id) {
+          return { ...item, lock: !lock }
+        }
+        return item
+      })
+    )
+    if (!lock) {
+      setIsOpenModule(false)
+    }
+  }
+
+  const handleReset = () => {
+    setTitle('')
+    setModules((modules) =>
+      modules.map((item) => {
+        if (item.id === id) {
+          delete item.lock
+          return {
+            ...item,
+            iterations: []
+          }
+        }
+        return item
+      })
+    )
+    setIsAddIteration(false)
   }
 
   return (
@@ -128,36 +157,46 @@ export default function ExperimentModule ({ data, setModules }) {
           <span>Experiment Module</span>
           {lock ? <FaLock /> : lock === false && <FaLockOpen />}
         </div>
-        {isOpenModule && !lock
+        {isOpenModule
           ? (
             <div>
-              <div
-                className={`iterations ${iterations.length === 1 && 'single'}`}
-              >
-                {iterations.map((item) => {
-                  return (
-                    <Iteration key={item.id} id={item.id} title={item.title} />
-                  )
-                })}
-                {(isAddIteration || iterations.length === 0) && (
-                  <IterationAdd
-                    id={newTitleId}
-                    title={title}
-                    handleOnChange={(e) => setTitle(e.target.value)}
-                  />
-                )}
-              </div>
-              {(isAddIteration || iterations.length === 0) && (
-                <div className='add-iteration-info'>
-                  To add a new iteration, start typing a prompt or{' '}
-                  <span className='click' onClick={openModal}>
-                    generate
-                  </span>{' '}
-                  one.
-                </div>
+              {!lock && (
+                <>
+                  <div
+                    className={`iterations ${
+                    iterations.length === 1 && 'single'
+                  }`}
+                  >
+                    {iterations.map((item) => {
+                      return (
+                        <Iteration
+                          key={item.id}
+                          id={item.id}
+                          title={item.title}
+                        />
+                      )
+                    })}
+                    {(isAddIteration || iterations.length === 0) && (
+                      <IterationAdd
+                        id={newTitleId}
+                        title={title}
+                        handleOnChange={(e) => setTitle(e.target.value)}
+                      />
+                    )}
+                  </div>
+                  {(isAddIteration || iterations.length === 0) && (
+                    <div className='add-iteration-info'>
+                      To add a new iteration, start typing a prompt or{' '}
+                      <span className='click' onClick={openModal}>
+                        generate
+                      </span>{' '}
+                      one.
+                    </div>
+                  )}
+                </>
               )}
               <div className='footer'>
-                {isAddIteration || iterations.length === 0
+                {(isAddIteration || iterations.length === 0) && !lock
                   ? (
                     <>
                       <button className='action'>CANCEL</button>
@@ -171,14 +210,20 @@ export default function ExperimentModule ({ data, setModules }) {
                     )
                   : (
                     <>
-                      <button className='action'>LOCK</button>
-                      <button className='action'>RESET</button>
-                      <button
-                        className='action add-iteration'
-                        onClick={() => setIsAddIteration(true)}
-                      >
-                        + ADD ITERATION
+                      <button className='action' onClick={handleLock}>
+                        {lock ? 'UNLOCK' : 'LOCK'}
                       </button>
+                      {!lock && (
+                        <>
+                          <button className='action' onClick={handleReset}>RESET</button>
+                          <button
+                            className='action add-iteration'
+                            onClick={() => setIsAddIteration(true)}
+                          >
+                            + ADD ITERATION
+                          </button>
+                        </>
+                      )}
                     </>
                     )}
               </div>
