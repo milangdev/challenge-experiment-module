@@ -27,7 +27,7 @@ export default function ExperimentModule ({ data, setModules }) {
   const [isAddIteration, setIsAddIteration] = useState(false)
   const [title, setTitle] = useState('')
 
-  const newTitleId = `EM-${iterations.length + 1}`
+  const newTitleId = `EM-${iterations?.length + 1}`
 
   const openModal = () => {
     setIsModalOpen(true)
@@ -103,8 +103,8 @@ export default function ExperimentModule ({ data, setModules }) {
 
   const getExperimentMoState = () => {
     if (lock) return 'Locked'
-    else if (!lock && iterations.length > 0) return 'Unlocked'
-    else if (iterations.length === 0) return 'Empty'
+    else if (!lock && iterations?.length > 0) return 'Unlocked'
+    else if (iterations?.length === 0) return 'Empty'
   }
 
   const handleLock = () => {
@@ -165,10 +165,10 @@ export default function ExperimentModule ({ data, setModules }) {
                 <>
                   <div
                     className={`iterations ${
-                    iterations.length === 1 && 'single'
+                    iterations?.length === 1 && 'single'
                   }`}
                   >
-                    {iterations.map((item) => {
+                    {iterations?.map((item) => {
                       return (
                         <Iteration
                           key={item.id}
@@ -177,7 +177,7 @@ export default function ExperimentModule ({ data, setModules }) {
                         />
                       )
                     })}
-                    {(isAddIteration || iterations.length === 0) && (
+                    {(isAddIteration || iterations?.length === 0) && (
                       <IterationAdd
                         id={newTitleId}
                         title={title}
@@ -185,7 +185,7 @@ export default function ExperimentModule ({ data, setModules }) {
                       />
                     )}
                   </div>
-                  {(isAddIteration || iterations.length === 0) && (
+                  {(isAddIteration || iterations?.length === 0) && (
                     <div className='add-iteration-info'>
                       To add a new iteration, start typing a prompt or{' '}
                       <span className='click' onClick={openModal}>
@@ -197,7 +197,7 @@ export default function ExperimentModule ({ data, setModules }) {
                 </>
               )}
               <div className='footer'>
-                {(isAddIteration || iterations.length === 0) && !lock
+                {(isAddIteration || iterations?.length === 0) && !lock
                   ? (
                     <>
                       <button className='action'>CANCEL</button>
