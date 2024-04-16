@@ -149,6 +149,7 @@ export default function ExperimentModule ({ data, setModules }) {
       <div className='experiment-module-state'>{getExperimentMoState()}</div>
       <div
         className={`experiment-module ${(lock || isOpenModule) && 'default'}`}
+        data-testid='experiment-module'
       >
         <div
           className={`header ${isOpenModule && 'open'}`}

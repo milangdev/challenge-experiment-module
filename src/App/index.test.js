@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import App from '.'
 
-test('renders learn react link', () => {
+test('renders modules in the layout', () => {
   render(<App />)
-  const linkElement = screen.getByText(/learn react/i)
-  expect(linkElement).toBeInTheDocument()
+  const modules = screen.getAllByTestId('experiment-module')
+  expect(modules.length).toBe(3)
 })
