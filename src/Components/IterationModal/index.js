@@ -1,10 +1,17 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './index.css'
 
-export default function IterationModal ({ id, isOpen, onClose, onConfirm }) {
+export default function IterationModal ({ data, isOpen, onClose, onRemove, onConfirm }) {
+  const { id, title, selection } = data
   const modalRef = useRef()
 
   const [titleLength, setTitleLength] = useState('short')
+
+  useEffect(() => {
+    if (selection) {
+      setTitleLength(selection)
+    }
+  }, [selection])
 
   const handleOverlayClick = (event) => {
     if (event.target === modalRef.current) {
@@ -13,7 +20,7 @@ export default function IterationModal ({ id, isOpen, onClose, onConfirm }) {
   }
 
   const handleOnConfirm = () => {
-    setTitleLength(12)
+    setTitleLength('short')
     onConfirm(titleLength)
   }
 
@@ -31,7 +38,7 @@ export default function IterationModal ({ id, isOpen, onClose, onConfirm }) {
                 <p className='iteration-id'>{id}</p>
               </div>
               <div>
-                <p className='iteration-title'>Iteration title</p>
+                <p className='iteration-title'>{title}</p>
                 <div className='iteration-buttons'>
                   <button className={`${titleLength === 'short' && 'iteration-button-active'}`} onClick={() => setTitleLength('short')}>short</button>
                   <button className={`${titleLength === 'medium' && 'iteration-button-active'}`} onClick={() => setTitleLength('medium')}>medium length</button>
@@ -41,7 +48,7 @@ export default function IterationModal ({ id, isOpen, onClose, onConfirm }) {
                 </button>
                 <div className='divider' />
                 <div className='footer-button'>
-                  <button onClick={onClose}>remove</button>
+                  <button onClick={onRemove}>remove</button>
                   <button className='footer-active' onClick={handleOnConfirm}>done</button>
                 </div>
               </div>

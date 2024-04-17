@@ -3,80 +3,65 @@ import { FaLock, FaLockOpen } from 'react-icons/fa'
 import './index.css'
 import IterationModal from '../IterationModal'
 
-const titles = [
-  'Ethereal Adventure',
-  'Whispers in the Dark',
-  'Lost in Translation',
-  'Midnight Serenade',
-  'Echoes of Eternity',
-  'Fragments of Tomorrow',
-  'Dancing with Shadows',
-  'Starlight Symphony',
-  'Whirlwind of Whispers',
-  'Secrets of the Forgotten',
-  'Dreamscape',
-  'Moonlit Melody',
-  'Whispering Winds',
-  'Emerald Enchantment'
-]
-
 export default function ExperimentModule ({ data, setModules }) {
   const { id, lock, iterations } = data
   const [isOpenModule, setIsOpenModule] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isIterationsModalOpen, setIsIterationsModalOpen] = useState(false)
+  const [activeIterationModal, setActiveIterationModal] = useState({})
   const [isAddIteration, setIsAddIteration] = useState(false)
   const [prompt, setPrompt] = useState('')
   const [title, setTitle] = useState('')
 
   const newTitleId = `EM-${iterations?.length + 1}`
 
-  const openModal = () => {
-    setIsModalOpen(true)
+  const openModal = (data) => {
+    setIsIterationsModalOpen(true)
+    setActiveIterationModal(data)
   }
 
   const closeModal = () => {
-    setIsModalOpen(false)
+    setIsIterationsModalOpen(false)
+    setActiveIterationModal({})
   }
 
-  const getLengthRange = (lengthType) => {
-    switch (lengthType) {
-      case 'short':
-        return { min: 0, max: 12 }
-      case 'medium':
-        return { min: 12, max: 24 }
-      case 'long':
-        return { min: 24, max: 35 }
-      default:
-        return { min: 0, max: 12 }
-    }
-  }
-
-  const handleGenerateIteration = (lengthType) => {
-    const filteredTitles = titles.filter(function (title) {
-      const lengthRange = getLengthRange(lengthType)
-      return title.length >= lengthRange.min && title.length <= lengthRange.max
-    })
-
-    const randomIndex = Math.floor(Math.random() * filteredTitles.length)
-
+  const handleUpdateIteration = (lengthType) => {
     setModules((modules) =>
       modules.map((item) => {
         if (item.id === id) {
           return {
             ...item,
-            lock: false,
-            iterations: [
-              ...item.iterations,
-              { id: newTitleId, title: filteredTitles[randomIndex] }
-            ]
+            iterations: item.iterations.map((iteration) => {
+              if (iteration.id === activeIterationModal.id) {
+                return { ...iteration, selection: lengthType }
+              }
+              return iteration
+            })
           }
         }
         return item
       })
     )
     setIsAddIteration(false)
-    setIsModalOpen(false)
+    closeModal()
     setTitle('')
+    setPrompt('')
+  }
+
+  const handleRemoveIteration = (e) => {
+    setModules((modules) =>
+      modules.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            iterations: item.iterations.filter(
+              (iteration) => iteration.id !== activeIterationModal.id
+            )
+          }
+        }
+        return item
+      })
+    )
+    closeModal()
   }
 
   const handleAddIteration = (e) => {
@@ -129,6 +114,7 @@ export default function ExperimentModule ({ data, setModules }) {
 
   const handleReset = () => {
     setTitle('')
+    setPrompt('')
     setModules((modules) =>
       modules.map((item) => {
         if (item.id === id) {
@@ -147,10 +133,11 @@ export default function ExperimentModule ({ data, setModules }) {
   return (
     <div>
       <IterationModal
-        isOpen={isModalOpen}
-        id={newTitleId}
+        isOpen={isIterationsModalOpen}
+        data={activeIterationModal}
         onClose={closeModal}
-        onConfirm={handleGenerateIteration}
+        onRemove={handleRemoveIteration}
+        onConfirm={handleUpdateIteration}
       />
       <div className='experiment-module-state'>{getExperimentMoState()}</div>
       <div
@@ -179,6 +166,7 @@ export default function ExperimentModule ({ data, setModules }) {
                         <Iteration
                           key={item.id}
                           id={item.id}
+                          onClick={() => openModal(item)}
                           title={item.title}
                         />
                       )
@@ -246,10 +234,10 @@ export default function ExperimentModule ({ data, setModules }) {
   )
 }
 
-const Iteration = ({ id, title }) => {
+const Iteration = ({ id, title, onClick }) => {
   return (
     <div className='iteration'>
-      <div className='info'>
+      <div className='info' onClick={onClick}>
         <span className='id'>{id}</span>
         <span className='title'>{title}</span>
       </div>
