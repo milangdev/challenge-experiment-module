@@ -81,7 +81,7 @@ export default function ExperimentModule ({ data, setModules }) {
 
   const handleAddIteration = (e) => {
     const iterationTitle = prompt || title
-    if ((e?.key !== 'Enter' && prompt) || !iterationTitle) return
+    if ((e?.key !== 'Enter' && prompt) || !iterationTitle?.trim()) return
     setModules((modules) =>
       modules.map((item) => {
         if (item.id === id) {
