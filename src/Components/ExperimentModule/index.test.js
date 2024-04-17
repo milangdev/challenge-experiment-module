@@ -21,13 +21,12 @@ describe('ExperimentModule Component', () => {
     expect(screen.queryByText('Experiment Module').closest('.open')).not.toBeInTheDocument()
   })
 
-  test('shows modal when "generate" link is clicked', () => {
-    const data = { id: 1, lock: false, iterations: [] }
+  test('shows modal when iteration is clicked', () => {
+    const data = { id: 1, lock: false, iterations: [{ id: 'EM-1', title: 'Iteration 1' }] }
     render(<ExperimentModule data={data} setModules={() => {}} />)
     fireEvent.click(screen.getByText('Experiment Module'))
-    fireEvent.click(screen.getByText('generate'))
-    expect(screen.getByText('CANCEL')).toBeInTheDocument()
-    expect(screen.getByText('DONE')).toBeInTheDocument()
+    fireEvent.click(screen.getByText('Iteration 1'))
+    expect(document.querySelector('.modal-content')).toBeInTheDocument()
   })
 
   test('adds iteration when title is typed and "DONE" button is clicked', () => {
