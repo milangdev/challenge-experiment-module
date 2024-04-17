@@ -25,6 +25,7 @@ export default function ExperimentModule ({ data, setModules }) {
   const [isOpenModule, setIsOpenModule] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isAddIteration, setIsAddIteration] = useState(false)
+  const [prompt, setPrompt] = useState('')
   const [title, setTitle] = useState('')
 
   const newTitleId = `EM-${iterations?.length + 1}`
@@ -78,15 +79,19 @@ export default function ExperimentModule ({ data, setModules }) {
     setTitle('')
   }
 
-  const handleAddIteration = () => {
-    if (!title) return
+  const handleAddIteration = (e) => {
+    const iterationTitle = prompt || title
+    if ((e?.key !== 'Enter' && prompt) || !iterationTitle) return
     setModules((modules) =>
       modules.map((item) => {
         if (item.id === id) {
           return {
             ...item,
             lock: false,
-            iterations: [...item.iterations, { id: newTitleId, title }]
+            iterations: [
+              ...item.iterations,
+              { id: newTitleId, title: iterationTitle }
+            ]
           }
         }
         return item
@@ -94,6 +99,7 @@ export default function ExperimentModule ({ data, setModules }) {
     )
     setIsAddIteration(false)
     setTitle('')
+    setPrompt('')
   }
 
   const handleExperimentModuleClick = () => {
@@ -187,11 +193,13 @@ export default function ExperimentModule ({ data, setModules }) {
                   </div>
                   {(isAddIteration || iterations?.length === 0) && (
                     <div className='add-iteration-info'>
-                      To add a new iteration, start typing a prompt or{' '}
-                      <span className='click' onClick={openModal}>
-                        generate
-                      </span>{' '}
-                      one.
+                      <textarea
+                        type='text'
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        onKeyDown={handleAddIteration}
+                        placeholder='To add a new iteration, start typing a prompt or generate one.'
+                      />
                     </div>
                   )}
                 </>
@@ -216,7 +224,9 @@ export default function ExperimentModule ({ data, setModules }) {
                       </button>
                       {!lock && (
                         <>
-                          <button className='action' onClick={handleReset}>RESET</button>
+                          <button className='action' onClick={handleReset}>
+                            RESET
+                          </button>
                           <button
                             className='action add-iteration'
                             onClick={() => setIsAddIteration(true)}

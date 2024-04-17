@@ -117,12 +117,24 @@ input:focus {
   border: none;
 }
 
+textarea:focus {
+  outline: none;
+  border: none;
+}
+
 .add-iteration-info {
-  margin-top: 16px;
+  margin-top: 16px;;
+}
+
+.add-iteration-info > textarea {
   background-color: var(--black-color);
   border-radius: 10px;
   color: var(--gray-color);
+  font-size: 16px;
+  border: none;
   padding: 1.1rem;
+  width: -webkit-fill-available;
+  resize: none;
 }
 
 .add-iteration-info .click {
